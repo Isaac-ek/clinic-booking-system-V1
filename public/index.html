@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Clinic — Modern Appointment Booking</title>
+  <meta name="description" content="Book your clinic appointment seamlessly. View available doctor slots, reserve instantly, and manage your bookings.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M12 5v14"/>
+            <path d="M5 12h14"/>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-title">Apex Clinic</span>
+          <span class="brand-tag">Patient Portal</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div class="status-indicator" id="system-status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">API Online</span>
+        </div>
+
+        <button class="btn btn-ghost" id="open-my-bookings-btn" aria-label="View My Bookings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          My Bookings
+        </button>
+
+        <button class="btn btn-outline" id="open-settings-btn" aria-label="API Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          API Key
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="hero-badge">Clinical Excellence & Precision Care</div>
+      <h1 class="hero-title">Book your appointment with leading medical specialists</h1>
+      <p class="hero-subtitle">
+        Explore real-time doctor availability, book confirmed appointment slots with instant confirmation, and manage your visits effortlessly.
+      </p>
+
+      <!-- Provider & Quick Filters -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label for="provider-filter" class="filter-label">Filter by Provider:</label>
+          <div class="select-wrapper">
+            <select id="provider-filter" class="select-input">
+              <option value="">All Specialists</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-stats">
+          <span id="available-count-pill" class="pill pill-success">0 Available</span>
+          <span id="total-count-pill" class="pill pill-neutral">0 Total Slots</span>
+          <button class="btn btn-sm btn-secondary" id="refresh-slots-btn" title="Refresh Slots">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            Refresh
+          </button>
+          <button class="btn btn-sm btn-ghost" id="seed-data-btn" title="Populate Sample Test Slots">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            Demo Slots
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slots Grid Section -->
+    <section class="slots-container" aria-label="Available appointment slots">
+      <div id="slots-loading" class="state-card loading-state">
+        <div class="spinner"></div>
+        <p>Loading real-time availability...</p>
+      </div>
+
+      <div id="slots-empty" class="state-card empty-state" style="display: none;">
+        <div class="empty-icon">🗓️</div>
+        <h3>No appointment slots found</h3>
+        <p>No slots match your criteria. Click below to populate demo slots for testing.</p>
+        <button class="btn btn-primary" id="empty-seed-btn">Load Demo Slots</button>
+      </div>
+
+      <div id="slots-grid" class="slots-grid" style="display: none;"></div>
+    </section>
+  </main>
+
+  <!-- Booking Modal -->
+  <dialog id="booking-modal" class="modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Book Appointment</h2>
+          <p class="modal-subtitle">Confirm your slot with our healthcare provider</p>
+        </div>
+        <button class="btn-icon" id="close-booking-modal" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Selected Slot Overview -->
+      <div class="slot-summary-box" id="modal-slot-summary">
+        <div class="summary-doctor">
+          <div class="doctor-avatar" id="modal-doc-avatar">DA</div>
+          <div>
+            <div class="summary-doc-name" id="modal-doc-name">Dr Ade</div>
+            <div class="summary-doc-role">General Practitioner</div>
+          </div>
+        </div>
+        <div class="summary-timing">
+          <div class="timing-item">
+            <span class="timing-label">Date:</span>
+            <span class="timing-val" id="modal-slot-date">—</span>
+          </div>
+          <div class="timing-item">
+            <span class="timing-label">Time:</span>
+            <span class="timing-val" id="modal-slot-time">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="booking-form" novalidate>
+        <input type="hidden" id="form-slot-id">
+
+        <div class="form-group">
+          <label for="patient-name" class="form-label">Full Name <span class="required">*</span></label>
+          <input
+            type="text"
+            id="patient-name"
+            class="form-input"
+            placeholder="e.g. Ada Obi"
+            required
+            autocomplete="name"
+          >
+          <div class="form-hint">Enter your legal full name as shown on health records</div>
+        </div>
+
+        <div class="form-group">
+          <label for="patient-email" class="form-label">Email Address <span class="required">*</span></label>
+          <input
+            type="email"
+            id="patient-email"
+            class="form-input"
+            placeholder="e.g. ada@example.com"
+            required
+            autocomplete="email"
+          >
+          <div class="form-hint">Confirmation & reminders will be sent to this email</div>
+        </div>
+
+        <!-- Feedback & Errors -->
+        <div id="booking-error-banner" class="alert-banner alert-error" style="display: none;">
+          <span class="alert-icon">⚠️</span>
+          <span id="booking-error-text">An error occurred</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancel-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submit-booking-btn">
+            <span class="btn-text">Confirm Booking</span>
+            <span class="btn-spinner" style="display: none;"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Confirmation Success Modal -->
+  <dialog id="confirmation-modal" class="modal">
+    <div class="modal-card modal-card-success">
+      <div class="success-icon-wrap">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <h2 class="modal-title text-center">Appointment Confirmed!</h2>
+      <p class="modal-subtitle text-center">Your clinic slot is locked and confirmed in the system.</p>
+
+      <div class="confirmation-details">
+        <div class="conf-item">
+          <span class="conf-label">Booking Reference:</span>
+          <div class="conf-id-copy">
+            <code id="conf-id">b_123456</code>
+            <button class="btn btn-xs btn-outline" id="copy-conf-id-btn" title="Copy Reference ID">Copy</button>
+          </div>
+        </div>
+        <div class="conf-item">
+          <span class="conf-label">Doctor:</span>
+          <span class="conf-val" id="conf-doctor">—</span>
+        </div>
+        <div class="conf-item">
+          <span class="conf-label">Date & Time:</span>
+          <span class="conf-val" id="conf-datetime">—</span>
+        </div>
+        <div class="conf-item">
+          <span class="conf-label">Patient:</span>
+          <span class="conf-val" id="conf-patient">—</span>
+        </div>
+        <div class="conf-item">
+          <span class="conf-label">Status:</span>
+          <span class="pill pill-success" id="conf-status">confirmed</span>
+        </div>
+      </div>
+
+      <div class="modal-actions-center">
+        <button class="btn btn-secondary" id="conf-done-btn">Back to Schedule</button>
+        <button class="btn btn-primary" id="conf-view-my-btn">View My Bookings</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- My Bookings Drawer / Modal -->
+  <dialog id="my-bookings-modal" class="modal modal-lg">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">My Bookings</h2>
+          <p class="modal-subtitle">Review and manage your scheduled appointments</p>
+        </div>
+        <button class="btn-icon" id="close-my-bookings-modal" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Email Lookup -->
+      <div class="bookings-lookup-bar">
+        <div class="form-group flex-1">
+          <label for="lookup-email-input" class="form-label">Patient Email Address:</label>
+          <div class="search-input-wrap">
+            <input
+              type="email"
+              id="lookup-email-input"
+              class="form-input"
+              placeholder="Enter your email to find bookings..."
+            >
+            <button class="btn btn-primary" id="find-bookings-btn">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bookings List -->
+      <div id="patient-bookings-list" class="patient-bookings-list">
+        <div class="empty-state-sm">
+          <p>Enter your email above to load your active and past appointments.</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-bar" id="bookings-pagination" style="display: none;">
+        <button class="btn btn-sm btn-outline" id="prev-page-btn" disabled>← Previous</button>
+        <span class="pagination-info" id="pagination-info">Page 1</span>
+        <button class="btn btn-sm btn-outline" id="next-page-btn" disabled>Next →</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Settings / API Key Modal -->
+  <dialog id="settings-modal" class="modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">API Authentication</h2>
+          <p class="modal-subtitle">Configure your X-API-Key for assessment checks</p>
+        </div>
+        <button class="btn-icon" id="close-settings-modal" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="api-key-input" class="form-label">X-API-Key</label>
+          <input
+            type="text"
+            id="api-key-input"
+            class="form-input font-mono"
+            placeholder="clinic-secret-key-2026"
+            value="clinic-secret-key-2026"
+          >
+          <div class="form-hint">This key is attached to the <code>X-API-Key</code> header for all API requests.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Base API URL</label>
+          <input
+            type="text"
+            id="base-api-url"
+            class="form-input font-mono"
+            readonly
+          >
+          <div class="form-hint">Your deployed backend endpoint address.</div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="reset-api-key-btn">Reset Default</button>
+          <button type="submit" class="btn btn-primary">Save Key</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>© 2026 Apex Health Clinic • Built with Node.js, Express, SQLite/PostgreSQL • Fully OpenAPI 3.0.3 Compliant</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: clinic-booking-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: API_KEY
+        value: clinic-secret-key-2026
+      - key: NODE_ENV
+        value: production

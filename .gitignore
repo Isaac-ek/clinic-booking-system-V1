@@ -1,0 +1,8 @@
+node_modules/
+clinic.db
+clinic.db-journal
+clinic.db-wal
+clinic.db-shm
+tests/test-clinic.db*
+.env
+.DS_Store
