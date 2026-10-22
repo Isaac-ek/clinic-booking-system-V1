@@ -59,12 +59,15 @@ function initDb() {
     pgPool.query(initSql).catch(err => {
       console.error('Error initializing PostgreSQL tables:', err);
     });
-    
     return { isPostgres: true, pool: pgPool };
   } else {
-    const dbPath = process.env.SQLITE_DB_PATH || path.join(__dirname, '..', 'clinic.db');
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT);
+    const defaultDbPath = isServerless ? path.join('/tmp', 'clinic.db') : path.join(__dirname, '..', 'clinic.db');
+    const dbPath = process.env.SQLITE_DB_PATH || defaultDbPath;
     sqliteDb = new Database(dbPath);
-    sqliteDb.pragma('journal_mode = WAL');
+    if (!isServerless) {
+      sqliteDb.pragma('journal_mode = WAL');
+    }
     sqliteDb.pragma('foreign_keys = ON');
 
     sqliteDb.exec(`
