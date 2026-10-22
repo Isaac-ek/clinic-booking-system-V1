@@ -1,5 +1,9 @@
 # Apex Clinic — Booking API & Patient Portal
 
+🌐 **Live Application & API**: [https://clinic-booking-system-v1.onrender.com/](https://clinic-booking-system-v1.onrender.com/)  
+🔑 **API Key (`X-API-Key`)**: `clinic-secret-key-2026`  
+📋 **API Spec**: [koyaacademy.com/assessment-api](https://koyaacademy.com/assessment-api)
+
 A resilient clinic booking API and responsive web portal built for Task 1 of the Koya Cohort 4 assessment. Fully compliant with the official OpenAPI 3.0.3 specification at [koyaacademy.com/assessment-api](https://koyaacademy.com/assessment-api).
 
 ---
