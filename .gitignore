@@ -6,3 +6,4 @@ clinic.db-shm
 tests/test-clinic.db*
 .env
 .DS_Store
+.vercel
